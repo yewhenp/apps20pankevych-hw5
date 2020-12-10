@@ -1,10 +1,6 @@
 package ua.edu.ucu.stream;
 
-import ua.edu.ucu.function.IntBinaryOperator;
-import ua.edu.ucu.function.IntConsumer;
-import ua.edu.ucu.function.IntPredicate;
-import ua.edu.ucu.function.IntToIntStreamFunction;
-import ua.edu.ucu.function.IntUnaryOperator;
+import ua.edu.ucu.function.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,7 +22,7 @@ public class AsIntStream implements IntStream, Iterable<Integer> {
 
             @Override
             public Integer next() {
-                if (!hasNext()){
+                if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
 
@@ -170,7 +166,9 @@ public class AsIntStream implements IntStream, Iterable<Integer> {
 
             @Override
             public boolean hasNext() {
-                if (tempValue == null) { return prevIterator.hasNext(); }
+                if (tempValue == null) {
+                    return prevIterator.hasNext();
+                }
                 return prevIterator.hasNext() ||
                         ((AsIntStream) tempValue).iterator().hasNext();
             }

@@ -5,6 +5,8 @@ import org.junit.Test;
 import ua.edu.ucu.stream.AsIntStream;
 import ua.edu.ucu.stream.IntStream;
 
+import java.util.NoSuchElementException;
+
 import static org.junit.Assert.assertEquals;
 
 public class StreamTest {
@@ -53,11 +55,25 @@ public class StreamTest {
     public void testStreamMin() {
         assertEquals(intStream.min(), 0, 0.00000001);
         emptyIntStream.min();
+
+        int[] intArr = {-1, 0, 1, 2, 3};
+        IntStream intTempStream = AsIntStream.of(intArr);
+        assertEquals(intTempStream.min(), -1, 0.00001);
+
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testStreamSum() {
         assertEquals(intStream.sum(), 42, 0.00000001);
         emptyIntStream.sum();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testStreamIteratorOverflow() {
+        int count = 0;
+        for (int ignored: (AsIntStream) intStream){
+            count += 1;
+        }
+        ((AsIntStream) intStream).iterator().next();
     }
 }
