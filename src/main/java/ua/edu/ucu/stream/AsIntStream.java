@@ -4,7 +4,6 @@ import ua.edu.ucu.function.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 public class AsIntStream implements IntStream, Iterable<Integer> {
 
@@ -22,9 +21,6 @@ public class AsIntStream implements IntStream, Iterable<Integer> {
 
             @Override
             public Integer next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
                 index += 1;
                 return data.get(index - 1);
             }
@@ -35,7 +31,7 @@ public class AsIntStream implements IntStream, Iterable<Integer> {
         AsIntStream stream = new AsIntStream();
 
         stream.data = new ArrayList<>();
-        for (int value: values){
+        for (int value : values) {
             stream.data.add(value);
         }
         return stream;
@@ -43,13 +39,13 @@ public class AsIntStream implements IntStream, Iterable<Integer> {
 
     @Override
     public Double average() {
-        if (count() == 0){
+        if (data.size() == 0) {
             throw new IllegalArgumentException();
         }
 
         double result = 0;
         int count = 0;
-        for (int value: this){
+        for (int value : this) {
             result += value;
             count += 1;
         }
@@ -58,13 +54,13 @@ public class AsIntStream implements IntStream, Iterable<Integer> {
 
     @Override
     public Integer max() {
-        if (count() == 0){
+        if (data.size() == 0) {
             throw new IllegalArgumentException();
         }
 
         int result = Integer.MIN_VALUE;
-        for (int value: this){
-            if (value > result){
+        for (int value : this) {
+            if (value > result) {
                 result = value;
             }
         }
@@ -73,13 +69,13 @@ public class AsIntStream implements IntStream, Iterable<Integer> {
 
     @Override
     public Integer min() {
-        if (count() == 0){
+        if (data.size() == 0) {
             throw new IllegalArgumentException();
         }
 
         int result = Integer.MAX_VALUE;
-        for (int value: this){
-            if (value < result){
+        for (int value : this) {
+            if (value < result) {
                 result = value;
             }
         }
@@ -89,20 +85,21 @@ public class AsIntStream implements IntStream, Iterable<Integer> {
     @Override
     public long count() {
         long result = 0;
-        for (int ignored : this){
+        for (int ignored : this) {
             result += 1;
         }
+
         return result;
     }
 
     @Override
     public Integer sum() {
-        if (count() == 0){
+        if (data.size() == 0) {
             throw new IllegalArgumentException();
         }
 
         int result = 0;
-        for (int value: this){
+        for (int value : this) {
             result += value;
         }
         return result;
@@ -121,7 +118,7 @@ public class AsIntStream implements IntStream, Iterable<Integer> {
             @Override
             public Integer next() {
                 int value = prevIterator.next();
-                while (!predicate.test(value)){
+                while (!predicate.test(value)) {
                     value = prevIterator.next();
                 }
                 return value;
@@ -132,7 +129,7 @@ public class AsIntStream implements IntStream, Iterable<Integer> {
 
     @Override
     public void forEach(IntConsumer action) {
-        for (int value: this){
+        for (int value : this) {
             action.accept(value);
         }
     }
@@ -195,7 +192,7 @@ public class AsIntStream implements IntStream, Iterable<Integer> {
     @Override
     public int[] toArray() {
         ArrayList<Integer> tempResult = new ArrayList<>();
-        for (int value: this){
+        for (int value : this) {
             tempResult.add(value);
         }
 
