@@ -1,9 +1,14 @@
 package ua.edu.ucu.stream;
 
-import ua.edu.ucu.function.*;
+import ua.edu.ucu.function.IntBinaryOperator;
+import ua.edu.ucu.function.IntConsumer;
+import ua.edu.ucu.function.IntPredicate;
+import ua.edu.ucu.function.IntToIntStreamFunction;
+import ua.edu.ucu.function.IntUnaryOperator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class AsIntStream implements IntStream, Iterable<Integer> {
 
@@ -21,6 +26,10 @@ public class AsIntStream implements IntStream, Iterable<Integer> {
 
             @Override
             public Integer next() {
+                if (!hasNext()){
+                    throw new NoSuchElementException();
+                }
+
                 index += 1;
                 return data.get(index - 1);
             }
@@ -159,18 +168,17 @@ public class AsIntStream implements IntStream, Iterable<Integer> {
             private final Iterator<Integer> prevIterator = valuesIterator;
             private IntStream tempValue;
 
-
             @Override
             public boolean hasNext() {
-                if (tempValue == null) {
-                    return prevIterator.hasNext();
-                }
-                return prevIterator.hasNext() || ((AsIntStream) tempValue).iterator().hasNext();
+                if (tempValue == null) { return prevIterator.hasNext(); }
+                return prevIterator.hasNext() ||
+                        ((AsIntStream) tempValue).iterator().hasNext();
             }
 
             @Override
             public Integer next() {
-                if (tempValue == null || !((AsIntStream) tempValue).iterator().hasNext()) {
+                if (tempValue == null ||
+                        !((AsIntStream) tempValue).iterator().hasNext()) {
                     int value = prevIterator.next();
                     tempValue = func.applyAsIntStream(value);
                 }
